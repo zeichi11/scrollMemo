@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 
 module.exports = {
     entry: './src/index.js',
@@ -10,17 +11,17 @@ module.exports = {
 
     devServer: {
         hot: true,
-        inline: false,
+        inline: true,
         host: '0.0.0.0',
         port: 4000,
         contentBase: __dirname + '/public'
     },
 
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js$/,
-                loader: 'babel',
+                loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: {
                     cacheDirectory: true,
