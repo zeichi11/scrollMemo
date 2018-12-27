@@ -17,6 +17,7 @@ class Contact extends React.Component {
 
     render() {
         const mapToComponent = (data) => {
+            // data 정보를 map 함수로 처리한 결과를 반환한다.
             return data.map((contact, i) => {
                 // map의 callback 함수의 parameter는
                 // currentValue : 현재 처리되고 있는 요소 (contact)
