@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev-server": "webpack-dev-server"
+    "build": "webpack",
+    "dev-server": "webpack-dev-server --hot --inline"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
