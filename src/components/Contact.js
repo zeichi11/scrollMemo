@@ -6,6 +6,7 @@ class Contact extends React.Component {
         super(props);
 
         this.state = {
+            keyword: '',
             contactData: [
                 {name: 'Abet', phone: '010-0000-0001'},
                 {name: 'Betty', phone: '010-0000-0002'},
@@ -13,10 +14,25 @@ class Contact extends React.Component {
                 {name: 'David', phone: '010-0000-0004'}
             ]
         };
+
+        this.handleSearchValueChange = this.handleSearchValueChange.bind(this);
+    }
+
+    handleSearchValueChange(e) {
+        this.setState({
+            keyword: e.target.value
+        })
     }
 
     render() {
         const mapToComponent = (data) => {
+            // data 정렬
+            data.sort();
+            data = data.filter(
+                (contact) => {
+                    return contact.name.indexOf(this.state.keyword) > -1;
+                }
+            );
             // data 정보를 map 함수로 처리한 결과를 반환한다.
             return data.map((contact, i) => {
                 // map의 callback 함수의 parameter는
@@ -30,6 +46,13 @@ class Contact extends React.Component {
 
         return (
             <div>
+                <h1>Contacts</h1>
+                <input
+                    name="keyword"
+                    placeholder="search"
+                    value={this.state.keyword}
+                    onChange={this.handleSearchValueChange}
+                />
                 {mapToComponent(this.state.contactData)}
             </div>
         )
