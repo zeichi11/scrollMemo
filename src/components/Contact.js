@@ -1,11 +1,13 @@
 import React from 'react';
 import ContactInfo from './ContactInfo';
+import ContactDetails from './ContactDetails';
 
 class Contact extends React.Component {
     constructor (props) {
         super(props);
 
         this.state = {
+            selectedKey: -1,
             keyword: '',
             contactData: [
                 {name: 'Abet', phone: '010-0000-0001'},
@@ -16,12 +18,19 @@ class Contact extends React.Component {
         };
 
         this.handleSearchValueChange = this.handleSearchValueChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
     handleSearchValueChange(e) {
         this.setState({
             keyword: e.target.value
-        })
+        });
+    }
+
+    handleClick(key) {
+        this.setState({
+            selectedKey: key
+        });
     }
 
     render() {
@@ -40,7 +49,11 @@ class Contact extends React.Component {
                 // Index : 현재 처리되고 있는 요소의 index 값 (i)
                 // Array : 메소드가 불려진 배열
                 // ContactInfo 컴포넌트의 props에 contact와 key를 설정함
-                return (<ContactInfo contact={contact} key={i}/>);
+                return (<ContactInfo
+                    contact={contact}
+                    key={i}
+                    onClick={() => this.handleClick(i)}/>
+                );
             })
         };
 
@@ -53,7 +66,12 @@ class Contact extends React.Component {
                     value={this.state.keyword}
                     onChange={this.handleSearchValueChange}
                 />
-                {mapToComponent(this.state.contactData)}
+
+                <div>{mapToComponent(this.state.contactData)}</div>
+                <ContactDetails
+                    isSelected={this.state.selectedKey != -1}
+                    contact={this.state.contactData[this.state.selectedKey]}
+                />
             </div>
         )
     }
