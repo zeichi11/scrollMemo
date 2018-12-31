@@ -14,6 +14,7 @@
     "morgan": "~1.9.0",
     "pug": "2.0.0-beta11",
     "react": "^16.6.3",
+    "react-addons-update": "^15.6.2",
     "react-dom": "^16.6.3",
     "react-hot-loader": "^4.6.2",
     "webpack": "^4.28.2",
