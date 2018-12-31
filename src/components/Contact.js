@@ -1,6 +1,8 @@
 import React from 'react';
+import update from 'react-addons-update';
 import ContactInfo from './ContactInfo';
 import ContactDetails from './ContactDetails';
+import ContactCreator from './ContactCreator';
 
 class Contact extends React.Component {
     constructor (props) {
@@ -17,20 +19,68 @@ class Contact extends React.Component {
             ]
         };
 
-        this.handleSearchValueChange = this.handleSearchValueChange.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
         this.handleClick = this.handleClick.bind(this);
+
+        this.handleCreate = this.handleCreate.bind(this);
+        this.handleRemove = this.handleRemove.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
     }
 
-    handleSearchValueChange(e) {
+    handleSearch(e) {
         this.setState({
             keyword: e.target.value
         });
     }
 
+    /**
+     * click 이벤트 처리(contact selection)
+     * @param {number} key
+     */
     handleClick(key) {
         this.setState({
             selectedKey: key
         });
+    }
+
+    /**
+     * contact를 contactData에 추가.
+     * @param {object} contact
+     */
+    handleCreate(contact) {
+        this.setState({
+            contactData: update(this.state.contactData,
+                {$push: [contact]}
+            )
+        });
+    }
+
+    /**
+     * select된 contact를 삭제하고 selectedKey를 초기화.
+     */
+    handleRemove() {
+        this.setState({
+            contactData: update(this.state.contactData,
+                { $splice: [[this.state.selectedKey, 1]] }
+            ),
+            selectedKey: -1
+        });
+    }
+
+    /**
+     * 전달받은 name, phone 정보로 선택된 contact를 수정.
+     * @param string name
+     * @param string phone
+     */
+    handleEdit(name, phone) {
+        this.setState({
+            contactData: update(this.state.contactData, {
+                [this.state.selectedKey]: {
+                    name: { $set: name },
+                    phone: { $set: phone }
+                }
+            })
+        })
     }
 
     render() {
@@ -64,13 +114,18 @@ class Contact extends React.Component {
                     name="keyword"
                     placeholder="search"
                     value={this.state.keyword}
-                    onChange={this.handleSearchValueChange}
+                    onChange={this.handleSearch}
                 />
 
                 <div>{mapToComponent(this.state.contactData)}</div>
+
                 <ContactDetails
                     isSelected={this.state.selectedKey != -1}
                     contact={this.state.contactData[this.state.selectedKey]}
+                />
+
+                <ContactCreator
+                    onCreate={this.state.handleCreate}
                 />
             </div>
         )
