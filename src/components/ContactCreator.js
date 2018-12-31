@@ -63,7 +63,7 @@ class ContactCreator extends React.Component {
                         onChange={this.handleChange}
                     />
                 </p>
-                <button onClick={this.state.handleClick}>Create</button>
+                <button onClick={this.handleClick}>Create</button>
             </div>
         )
     }
