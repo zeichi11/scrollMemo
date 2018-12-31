@@ -59,6 +59,11 @@ class Contact extends React.Component {
      * select된 contact를 삭제하고 selectedKey를 초기화.
      */
     handleRemove() {
+        // select된 contact가 없는 경우 return
+        if (this.state.selectedKey < 0) {
+            return;
+        }
+
         this.setState({
             contactData: update(this.state.contactData,
                 { $splice: [[this.state.selectedKey, 1]] }
@@ -69,8 +74,8 @@ class Contact extends React.Component {
 
     /**
      * 전달받은 name, phone 정보로 선택된 contact를 수정.
-     * @param string name
-     * @param string phone
+     * @param {string} name
+     * @param {string} phone
      */
     handleEdit(name, phone) {
         this.setState({
@@ -122,10 +127,12 @@ class Contact extends React.Component {
                 <ContactDetails
                     isSelected={this.state.selectedKey != -1}
                     contact={this.state.contactData[this.state.selectedKey]}
+                    onRemove={this.handleRemove}
+                    onEdit={this.handleEdit}
                 />
 
                 <ContactCreator
-                    onCreate={this.state.handleCreate}
+                    onCreate={this.handleCreate}
                 />
             </div>
         )
