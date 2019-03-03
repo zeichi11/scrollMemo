@@ -11,6 +11,7 @@ class ContactCreator extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     /**
@@ -43,6 +44,16 @@ class ContactCreator extends React.Component {
         });
     }
 
+    /**
+     * key 입력에 대한 이벤트를 처리함
+     * @param e
+     */
+    handleKeyPress(e) {
+        if (e.charCode === 13) {
+            this.handleClick();
+        }
+    }
+
     render() {
         return (
             <div>
@@ -61,6 +72,7 @@ class ContactCreator extends React.Component {
                         placeholder="phone"
                         value={this.state.phone}
                         onChange={this.handleChange}
+                        onKeyPress={this.handleKeyPress}
                     />
                 </p>
                 <button onClick={this.handleClick}>Create</button>

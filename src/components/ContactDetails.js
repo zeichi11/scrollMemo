@@ -12,17 +12,26 @@ class ContactDetails extends React.Component {
         this.handleToggle = this.handleToggle.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
+        this.handleKeyPress = this.handleKeyPress(this);
     }
 
     /**
      * Edit 버튼의 toggle값을 설정한다.
      */
     handleToggle() {
+        if (!this.state.isEdit) {
+            this.setState({
+                name: this.props.contact.name,
+                phone: this.props.contact.phone
+            });
+        } else {
+            this.handleEdit();
+        }
+
         this.setState({
             isEdit: !this.state.isEdit,
-            name: this.props.contact.name,
-            phone: this.props.contact.phone
         });
+
     }
 
     /**
@@ -41,6 +50,12 @@ class ContactDetails extends React.Component {
      */
     handleEdit() {
         this.props.onEdit(this.state.name, this.state.phone)
+    }
+
+    handleKeyPress(e) {
+        if (e.charCode === 13) {
+            this.handleToggle();
+        }
     }
 
     render() {
@@ -64,7 +79,8 @@ class ContactDetails extends React.Component {
                            name="phone"
                            placeholder="phone"
                            value={this.state.phone}
-                           onChange={this.handleChange}/>
+                           onChange={this.handleChange}
+                           onKeyPress={this.handleKeyPress}/>
                 </p>
             </div>
         );
