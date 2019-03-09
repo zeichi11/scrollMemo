@@ -27,6 +27,34 @@ class Contact extends React.Component {
         this.handleEdit = this.handleEdit.bind(this);
     }
 
+    /**
+     * component 마운트 전 처리
+     */
+    componentWillMount() {
+        const contactData = localStorage.contactData;
+
+        if (contactData) {
+            this.setState({
+                contactData: JSON.parse(contactData)
+            });
+        }
+    }
+
+    /**
+     * component 업데이트 후 처리
+     * @param prevProps
+     * @param prevState
+     */
+    componentDidUpdate(prevProps, prevState) {
+        if (JSON.stringify(prevState.contactData) != JSON.stringify(this.state.contactData)) {
+            localStorage.contactData = JSON.stringify(this.state.contactData);
+        }
+    }
+
+    /**
+     * 검색 처리
+     * @param e
+     */
     handleSearch(e) {
         this.setState({
             keyword: e.target.value
