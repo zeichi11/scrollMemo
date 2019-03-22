@@ -12,7 +12,7 @@ export function decrement() {
     };
 }
 
-export function setColo(color) {
+export function setColor(color) {
     return {
         type: Constants.action.SET_COLOR,
         color: color
