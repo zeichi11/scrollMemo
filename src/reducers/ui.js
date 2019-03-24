@@ -1,4 +1,4 @@
-import Constants from './common/Constants';
+import Constants from '../common/Constants';
 
 // 초기 state
 const initialState = {
