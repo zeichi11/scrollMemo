@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import Paragraph from './components/Paragraph';
+import SelectionContainer from './SelectionContainer';
 import CommonUtils from './common/CommonUtils';
+
+import KeyHandler from './handler/KeyHandler';
+
 import { connect, bindActionCreators } from 'react-redux';
 import * as actions from '../actions';
 
@@ -15,9 +19,123 @@ class Editor extends Component {
 			'extentOffset': 0
 		};
 
+		this.keyHandler = new KeyHandler(document.getElementById('editor'));
+
 		this.handleMouseDown = this.handleMouseDown.bind(this);
 		this.handleMouseMove = this.handleMouseMove.bind(this);
 		this.handleMouseUp = this.handleMouseUp.bind(this);
+
+		this.getOffsetY = this.getOffsetY.bind(this);
+		this.getOffsetX = this.getOffsetX.bind(this);
+	}
+
+	/**
+	 *
+	 * @param {object} target
+	 * @returns {null}
+	 */
+	getParagraph(target) {
+		return target ? CommonUtils.closestTag(target, 'P') : null;
+	}
+
+	/**
+	 *
+	 * @param {element} targetParagraph
+	 * @returns {number}
+	 */
+	getOffsetY(targetParagraph) {
+		let PARAGRAPH_PADDING_BOTTOM = 15,
+			paragraphList = this.props.paragraphs,
+			styles = this.props.styles,
+			targetParagraphId,
+			paragraphId,
+			style,
+			top = 0,
+			lineHeight = 0,
+			i;
+
+		if (!targetParagraph) {
+			return top;
+		}
+
+		targetParagraphId = targetParagraph.getAttribute('id');
+		for (i = 0; i < paragraphList.length; i++) {
+			paragraphId = paragraphList[i].id;
+			style = styles[paragraphId];
+
+			if (style) {
+				if (paragraphId === targetParagraphId) {
+					break;
+				}
+
+				lineHeight = style.lineHeight;
+				top = top + lineHeight + PARAGRAPH_PADDING_BOTTOM;
+			}
+		}
+
+		return top;
+	}
+
+	/**
+	 *
+	 * @param targetParagraph
+	 * @param target
+	 * @param pageX
+	 * @returns {number|*}
+	 */
+	getOffsetX(targetParagraph, target, pageX) {
+		let BODY_MARGIN = 8,
+			div = document.getElementById('dummy_wrap'),
+			div2 = document.createElement('DIV'),
+			focusOffset = 0,
+			spanList = targetParagraph.childNodes,
+			targetTextNode,
+			textNode,
+			span,
+			spanWidth = 0,
+			left,
+			i;
+
+		if (target.nodeName === 'SPAN') {
+			targetTextNode = target.firstChild;
+		}
+
+		for (i = 0; i < spanList.length; i++) {
+			textNode = spanList[i].childNodes[0];
+			if (textNode === targetTextNode) {
+				span = document.createElement('SPAN');
+				span.style.whiteSpace = 'pre';
+
+				while (spanWidth + BODY_MARGIN < pageX) {
+					span.innerHTML = '';
+					div.innerHTML = '';
+
+					span.appendChild(document.createTextNode(textNode.textContent.substring(0, focusOffset)));
+					div.appendChild(span);
+
+					spanWidth = div.offsetWidth;
+					focusOffset++;
+
+					if (focusOffset > textNode.textContent.length) {
+						break;
+					}
+				}
+				break;
+
+			} else {
+				div2.appendChild(spanList[i].cloneNode(true));
+			}
+		}
+
+		if (div.firstChild) {
+			div2.appendChild(div.firstChild);
+		}
+
+		div.innerHTML = div2.innerHTML;
+		left = div.offsetWidth + BODY_MARGIN;
+		div.innerHTML = '';
+
+		return left;
 	}
 
 	/**
@@ -25,7 +143,10 @@ class Editor extends Component {
 	 * @param {object} e
 	 */
 	handleMouseDown(e) {
+		console.log('-- mouse dpwn --');
+		console.log(e.target);
 
+		this.selection.anchorNode = e.target;
 	}
 
 	/**
@@ -41,7 +162,24 @@ class Editor extends Component {
 	 * @param {object} e
 	 */
 	handleMouseUp(e) {
+		console.log('-- mouse up --');
+		console.log(e.target);
 
+		let targetParagraph = this.getParagraph(e.target),
+			pageX = e.pageX,
+			top,
+			left,
+			height;
+
+		if (!targetParagraph) {
+			return;
+		}
+
+		top = this.getOffsetY(targetParagraph);
+		left = this.getOffsetX(targetParagraph, e.target, pageX);
+		height = parseInt(targetParagraph.style['line-height']);
+
+		this.props.updateSelection(top, left, height);
 	}
 
 	/**
@@ -95,6 +233,7 @@ class Editor extends Component {
 				>
 					{renderParagraphs(this.props.paragraphs, this.props.styles)}
 				</div>
+				<SelectionContainer onMouseUp={this.handleMouseUp}/>
 			</div>
 		)
 	}
