@@ -32,7 +32,18 @@ export default function style(state = initialState, action) {
 				left: action.left,
 				height: action.height
 			};
-
+		case Constants.action.UPDATE_ANCHOR:
+			return {
+				...state,
+				anchorNode: action.node,
+				anchorOffset: action.offset
+			};
+		case Constants.action.UPDATE_EXTENT:
+			return {
+				...state,
+				extentNode: action.node,
+				extentOffset: action.offset
+			};
 		default:
 			return state;
 	}

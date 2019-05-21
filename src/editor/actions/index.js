@@ -41,3 +41,19 @@ export function updateSelection(top, left, height) {
 		height: height
 	}
 }
+
+export function updateAnchor(node, offset) {
+	return {
+		type: Constants.action.UPDATE_ANCHOR,
+		node: node,
+		offset: offset
+	}
+}
+
+export function updateExtent(node, offset) {
+	return {
+		type: Constants.action.UPDATE_EXTENT,
+		node: node,
+		offset: offset
+	}
+}
