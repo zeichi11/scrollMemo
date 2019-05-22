@@ -34,8 +34,8 @@ class Editor extends Component {
 	 * @param {object} target
 	 * @returns {null}
 	 */
-	getParagraph(target) {
-		return target ? CommonUtils.closestTag(target, 'P') : null;
+	getParentNode(target, nodeName) {
+		return target ? CommonUtils.closestTag(target, nodeName) : null;
 	}
 
 	/**
@@ -76,6 +76,50 @@ class Editor extends Component {
 		return top;
 	}
 
+	getAnchorOffset(target, pageX) {
+		let BODY_MARGIN = 8,
+			div = document.getElementById('dummy_wrap'),
+			div2 = document.createElement('DIV'),
+			focusOffset = 0,
+			spanList = targetParagraph.childNodes,
+			targetTextNode,
+			textNode,
+			span,
+			spanWidth = 0,
+			left,
+			i;
+
+
+		for (i = 0; i < spanList.length; i++) {
+			textNode = spanList[i].childNodes[0];
+
+			if (textNode === targetTextNode) {
+				span = document.createElement('SPAN');
+				span.style.whiteSpace = 'pre';
+				focusOffset = 0;
+
+				while (spanWidth + BODY_MARGIN < pageX) {
+					span.innerHTML = '';
+					div.innerHTML = '';
+
+					span.appendChild(document.createTextNode(textNode.textContent.substring(0, focusOffset)));
+					div.appendChild(span);
+
+					spanWidth = div.offsetWidth;
+					focusOffset++;
+
+					if (focusOffset > textNode.textContent.length) {
+						break;
+					}
+				}
+				break;
+
+			} else {
+				div2.appendChild(spanList[i].cloneNode(true));
+			}
+		}
+	}
+
 	/**
 	 *
 	 * @param targetParagraph
@@ -102,9 +146,11 @@ class Editor extends Component {
 
 		for (i = 0; i < spanList.length; i++) {
 			textNode = spanList[i].childNodes[0];
+
 			if (textNode === targetTextNode) {
 				span = document.createElement('SPAN');
 				span.style.whiteSpace = 'pre';
+				focusOffset = 0;
 
 				while (spanWidth + BODY_MARGIN < pageX) {
 					span.innerHTML = '';
@@ -143,10 +189,25 @@ class Editor extends Component {
 	 * @param {object} e
 	 */
 	handleMouseDown(e) {
-		console.log('-- mouse dpwn --');
+		console.log('-- mouse down --');
 		console.log(e.target);
 
-		this.selection.anchorNode = e.target;
+		let targetParagraph = this.getParentNode(e.target, 'P'),
+			targetSpan = this.getParentNode(e.target, 'SPAN'),
+			pageX = e.pageX,
+			top,
+			left,
+			height;
+
+		if (!targetParagraph || !targetSpan) {
+			return;
+		}
+
+		top = this.getOffsetY(targetParagraph);
+		left = this.getOffsetX(targetParagraph, e.target, pageX);
+		height = parseInt(targetParagraph.style['line-height']);
+
+		this.props.updateSelection(top, left, height);
 	}
 
 	/**
@@ -164,22 +225,6 @@ class Editor extends Component {
 	handleMouseUp(e) {
 		console.log('-- mouse up --');
 		console.log(e.target);
-
-		let targetParagraph = this.getParagraph(e.target),
-			pageX = e.pageX,
-			top,
-			left,
-			height;
-
-		if (!targetParagraph) {
-			return;
-		}
-
-		top = this.getOffsetY(targetParagraph);
-		left = this.getOffsetX(targetParagraph, e.target, pageX);
-		height = parseInt(targetParagraph.style['line-height']);
-
-		this.props.updateSelection(top, left, height);
 	}
 
 	/**
@@ -233,7 +278,10 @@ class Editor extends Component {
 				>
 					{renderParagraphs(this.props.paragraphs, this.props.styles)}
 				</div>
-				<SelectionContainer onMouseUp={this.handleMouseUp}/>
+				<SelectionContainer
+					onMouseUp={this.handleMouseUp}
+					updateSelection={this.props.updateSelection}
+				/>
 			</div>
 		)
 	}
