@@ -8,7 +8,8 @@ const mapStateToProps = (state) => {
 		anchor: state.selection.anchorNode,
 		anchorOffset: state.selection.anchorOffset,
 		extent: state.selection.extentNode,
-		extentOffset: state.selection.extentOffset
+		extentOffset: state.selection.extentOffset,
+		type: state.selection.type
 	}
 };
 
