@@ -15,6 +15,7 @@ const initialState = {
 	focusOffset: -1,
 	isCollapsed: false,
 	rangeCount: 0,
+	reverse: false,
 	type: "Cursor"
 };
 
@@ -43,6 +44,12 @@ export default function style(state = initialState, action) {
 				...state,
 				extentNode: action.node,
 				extentOffset: action.offset
+			};
+		case Constants.action.UPDATE_SELECTION_TYPE:
+			return {
+				...state,
+				reverse: action.reverse,
+				type: action.selectionType
 			};
 		default:
 			return state;

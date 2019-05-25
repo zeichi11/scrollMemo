@@ -12,12 +12,7 @@ class Editor extends Component {
 	constructor(props) {
 		super(props);
 
-		this.selection = {
-			'anchorNode': null,
-			'anchorOffset': 0,
-			'extentNode': null,
-			'extentOffset': 0
-		};
+		this.isDragStart = false;
 
 		this.keyHandler = new KeyHandler(document.getElementById('editor'));
 
@@ -25,8 +20,8 @@ class Editor extends Component {
 		this.handleMouseMove = this.handleMouseMove.bind(this);
 		this.handleMouseUp = this.handleMouseUp.bind(this);
 
-		this.getOffsetY = this.getOffsetY.bind(this);
-		this.getOffsetX = this.getOffsetX.bind(this);
+		this.getFocusOffset = this.getFocusOffset.bind(this);
+
 	}
 
 	/**
@@ -40,60 +35,20 @@ class Editor extends Component {
 
 	/**
 	 *
-	 * @param {element} targetParagraph
-	 * @returns {number}
-	 */
-	getOffsetY(targetParagraph) {
-		let PARAGRAPH_PADDING_BOTTOM = 15,
-			paragraphList = this.props.paragraphs,
-			styles = this.props.styles,
-			targetParagraphId,
-			paragraphId,
-			style,
-			top = 0,
-			lineHeight = 0,
-			i;
-
-		if (!targetParagraph) {
-			return top;
-		}
-
-		targetParagraphId = targetParagraph.getAttribute('id');
-		for (i = 0; i < paragraphList.length; i++) {
-			paragraphId = paragraphList[i].id;
-			style = styles[paragraphId];
-
-			if (style) {
-				if (paragraphId === targetParagraphId) {
-					break;
-				}
-
-				lineHeight = style.lineHeight;
-				top = top + lineHeight + PARAGRAPH_PADDING_BOTTOM;
-			}
-		}
-
-		return top;
-	}
-
-	/**
-	 *
-	 * @param targetParagraph
+	 * @param paragraph
 	 * @param target
 	 * @param pageX
 	 * @returns {number|*}
 	 */
-	getOffsetX(targetParagraph, target, pageX) {
+	getFocusOffset(paragraph, target, pageX) {
 		let BODY_MARGIN = 8,
 			div = document.getElementById('dummy_wrap'),
-			div2 = document.createElement('DIV'),
 			focusOffset = 0,
-			spanList = targetParagraph.childNodes,
+			spanList = paragraph.childNodes,
 			targetTextNode,
 			textNode,
 			span,
 			spanWidth = 0,
-			left,
 			i;
 
 		if (target.nodeName === 'SPAN') {
@@ -122,20 +77,32 @@ class Editor extends Component {
 				}
 				break;
 
-			} else {
-				div2.appendChild(spanList[i].cloneNode(true));
 			}
 		}
 
-		if (div.firstChild) {
-			div2.appendChild(div.firstChild);
+		return focusOffset;
+	}
+
+	/**
+	 *
+	 * @param target
+	 * @param pageX
+	 * @returns {{node: *, offset: number}}
+	 */
+	getFocusInfo(target, pageX) {
+		let focusNode = target,
+			focusParagraph = CommonUtils.closestTag(focusNode, 'P'),
+			focusOffset = 0;
+
+		if (target.nodeName !== 'P') {
+			focusNode = CommonUtils.closestTag(target, 'SPAN');
+			focusOffset = this.getFocusOffset(focusParagraph, focusNode, pageX);
 		}
 
-		div.innerHTML = div2.innerHTML;
-		left = div.offsetWidth + BODY_MARGIN;
-		div.innerHTML = '';
-
-		return left;
+		return {
+			node: focusNode,
+			offset: focusOffset
+		}
 	}
 
 	/**
@@ -146,7 +113,10 @@ class Editor extends Component {
 		console.log('-- mouse dpwn --');
 		console.log(e.target);
 
-		this.selection.anchorNode = e.target;
+		let focusInfo = this.getFocusInfo(e.target, e.pageX);
+		console.log(focusInfo.node, focusInfo.offset);
+		this.props.updateAnchor(focusInfo.node, focusInfo.offset);
+		this.isDragStart = true;
 	}
 
 	/**
@@ -154,7 +124,16 @@ class Editor extends Component {
 	 * @param {object} e
 	 */
 	handleMouseMove(e) {
+		let focusInfo;
 
+		if (this.isDragStart){
+			console.log('-- mouse move --');
+			console.log(e.target);
+
+			focusInfo = this.getFocusInfo(e.target, e.pageX);
+			console.log(focusInfo.node, focusInfo.offset);
+			this.props.updateExtent(focusInfo.node, focusInfo.offset);
+		}
 	}
 
 	/**
@@ -165,21 +144,9 @@ class Editor extends Component {
 		console.log('-- mouse up --');
 		console.log(e.target);
 
-		let targetParagraph = this.getParagraph(e.target),
-			pageX = e.pageX,
-			top,
-			left,
-			height;
-
-		if (!targetParagraph) {
-			return;
+		if (this.isDragStart) {
+			this.isDragStart = false;
 		}
-
-		top = this.getOffsetY(targetParagraph);
-		left = this.getOffsetX(targetParagraph, e.target, pageX);
-		height = parseInt(targetParagraph.style['line-height']);
-
-		this.props.updateSelection(top, left, height);
 	}
 
 	/**

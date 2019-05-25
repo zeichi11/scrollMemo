@@ -25,7 +25,7 @@ const mapDispatchToProps = (dispatch) => {
 		handleParagraphDeletion: () => {dispatch(actions.deleteParagraph())},
 		// 전달인자를 넣을 수도 있다.
 
-		updateSelection: (top, left, height) => {dispatch(actions.updateSelection(top, left, height))},
+		// updateSelection: (top, left, height) => {dispatch(actions.updateSelection(top, left, height))},
 		updateAnchor: (node, offset) => {dispatch(actions.updateAnchor(node, offset))},
 		updateExtent: (node, offset) => {dispatch(actions.updateExtent(node, offset))}
 	}

@@ -5,9 +5,14 @@ import Selection from './components/Selection';
 
 const mapStateToProps = (state) => {
 	return {
-		height: state.selection.height,
-		top: state.selection.top,
-		left: state.selection.left
+		paragraphs: state.paragraph,
+		styles: state.style,
+
+		anchorNode: state.selection.anchorNode,
+		anchorOffset: state.selection.anchorOffset,
+		extentNode: state.selection.extentNode,
+		extentOffset: state.selection.extentOffset,
+		type: state.selection.type
 	}
 };
 
