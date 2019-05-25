@@ -27,7 +27,8 @@ const mapDispatchToProps = (dispatch) => {
 
 		// updateSelection: (top, left, height) => {dispatch(actions.updateSelection(top, left, height))},
 		updateAnchor: (node, offset) => {dispatch(actions.updateAnchor(node, offset))},
-		updateExtent: (node, offset) => {dispatch(actions.updateExtent(node, offset))}
+		updateExtent: (node, offset) => {dispatch(actions.updateExtent(node, offset))},
+		updateSelectionType: (selectionType, isReverse) => {dispatch(actions.updateSelectionType(selectionType, isReverse))}
 	}
 
 	//

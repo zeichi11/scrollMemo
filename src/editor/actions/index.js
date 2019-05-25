@@ -57,3 +57,11 @@ export function updateExtent(node, offset) {
 		offset: offset
 	}
 }
+
+export function updateSelectionType(selectionType, isReverse) {
+	return {
+		type: Constants.action.UPDATE_SELECTION_TYPE,
+		selectionType: selectionType,
+		reverse: isReverse,
+	}
+}
