@@ -1,0 +1,7 @@
+# Dependency directories & files
+node_modules/
+package-lock.json
+
+# IDEA
+.idea/
+*.imi
