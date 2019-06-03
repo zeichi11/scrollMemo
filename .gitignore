@@ -5,3 +5,6 @@ package-lock.json
 # IDEA
 .idea/
 *.iml
+
+# etc
+public/bundle.js
