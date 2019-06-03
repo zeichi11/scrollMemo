@@ -4,4 +4,4 @@ package-lock.json
 
 # IDEA
 .idea/
-*.imi
+*.iml
