@@ -1,21 +1,16 @@
 import IMEComponent from './IMEComponent';
 import { connect, bindActionCreators } from 'react-redux';
 
-export default connect(null,null
+export default connect(
 	// dispatch => {
-		// return {
-		// 	updateSpan
-		// }
-
+	// 	return {
+	// 		updateSpan
+	// 	}
+    //
 	// },
-	// state => {
-		// return {
-		// 	onCompositionStart: handler.handleCompositionStart,
-		// 	onCompositionUpdate: handler.handleCompositionUpdate,
-		// 	onCompositionEnd: handler.handleCompositionEnd,
-		// 	onKeyDown: handler.handleKeyDown,
-		// 	onKeyUp: handler.handleKeyUp,
-		// 	onKeyPress: handler.handleKeyPress
-		// }
-	// }
+	state => {
+		return {
+			selection: state.selection
+		}
+	}
 )(IMEComponent);

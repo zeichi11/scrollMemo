@@ -8,7 +8,7 @@ const initialState = {
 		//	=> 겹쳐지는 스타일은 모델 상에 존재할 수 없도록 선처리 후 저장해야함
 		// 	=> {"bold" [2,4]}, {"bold, italic", [5,7], {"italic", [8,9]}}
 		format: [
-			{style: [], offset:[0, 2]},
+			{style: [], length: 2, offset:[0, 2]},
 			{style: ["bold"], offset:[2, 4]},
 			{style: [], offset:[4, 5]},
 			{style: ["bold", "italic"], offset:[5, 7]},
@@ -57,7 +57,10 @@ export default function style(state = initialState, action) {
 					lineHeight: action.height
 				}
 			};
-			return state;
+		case Constants.action.UPDATE_SPAN:
+			return {
+
+			};
 		default:
 			return state;
 	}

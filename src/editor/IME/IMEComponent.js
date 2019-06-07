@@ -12,6 +12,49 @@ class IMEComponent extends Component {
 		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.handleKeyPress = this.handleKeyPress.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
+
+		this.update = this.update.bind(this);
+		this.delete = this.delete.bind(this);
+		this.updateSelection = this.updateSelection.bind(this);
+
+		this.value = '';
+		this.compositionStart = false;
+	}
+
+	update(value) {
+		let selection = this.props.selection,
+			anchorNode = selection.anchorNode,
+			anchorOffset = selection.anchorOffset,
+			extentNode = selection.extentNode,
+			extentOffset = selection.extentOffset,
+			textNode,
+			textContent,
+			newTextContent = '';
+
+		// if (anchorNode === extentNode) {
+		// 	if (anchorOffset === extentOffset) {
+		// 		console.log(anchorNode);
+		// 	}
+		// }
+
+		if (anchorNode) {
+			textNode = anchorNode.firstChild;
+			if (textNode.nodeName === '#text') {
+				textContent = textNode.textContent;
+				newTextContent = textContent.slice(0, anchorOffset) + value + textContent.slice(anchorOffset);
+				console.log('update');
+				console.log(newTextContent);
+			}
+
+		}
+	}
+
+	delete() {
+
+	}
+
+	updateSelection() {
+
 	}
 
 	handleOnBlur() {
@@ -39,8 +82,8 @@ class IMEComponent extends Component {
 
 	handleCompositionStart(e) {
 		console.log('-- compositionstart --');
-		console.log(e);
 		console.log('----------------------');
+		this.compositionStart = true;
 	}
 
 	handleCompositionUpdate(e) {
@@ -48,6 +91,7 @@ class IMEComponent extends Component {
 		// console.log(this.imeInput.textContent);
 		console.log(e.data);
 		console.log('----------------------');
+		this.value = this.imeInput.value;
 	}
 
 	handleCompositionEnd(e) {
@@ -57,27 +101,39 @@ class IMEComponent extends Component {
 		console.log('----------------------');
 		//appen and clear
 		this.imeInput.value = '';
+		if (this.compositionStart) {
+			this.compositionStart = false;
+			// update cursor
+		}
 	}
 
 	handleKeyDown(e) {
 		console.log('-- KeyDown --');
 		// console.log(this.imeInput.value);
-		console.log(e.data);
+		this.value = this.imeInput.value;
 		console.log('-------------');
 	}
 
 	handleKeyPress(e) {
 		console.log('-- KeyPress --');
 		// console.log(this.imeInput.value);
-		console.log(e.data);
+		// this.value = this.imeInput.value;
+		// console.log(this.value);
 		console.log('--------------');
 	}
 
 	handleKeyUp(e) {
 		console.log('-- KeyUp --');
 		// console.log(this.imeInput.value);
-		console.log(e.data);
 		console.log('-----------');
+		if (!this.compositionStart) {
+			this.value = this.imeInput.value;
+			console.log(this.value);
+			this.imeInput.value = '';
+
+			this.update(this.value);
+			// update cursor
+		}
 	}
 
 	render() {

@@ -16,10 +16,15 @@ export function insertParagraph() {
 
 export function deleteParagraph() {
 	return {
-		type: Constants.action.DELETE_PARAGRAPH,
+		type: Constants.action.DELETE_PARAGRAPH
 	}
 }
 
+export function updateSpan() {
+	return {
+		type: Constants.action.UPDATE_SPAN
+	}
+}
 
 export function insertFormat() {
 	return {

@@ -61,7 +61,7 @@ class Editor extends Component {
 				span = document.createElement('SPAN');
 				span.style.whiteSpace = 'pre';
 
-				while (spanWidth + BODY_MARGIN < pageX) {
+				while (true) {
 					span.innerHTML = '';
 					div.innerHTML = '';
 
@@ -69,6 +69,10 @@ class Editor extends Component {
 					div.appendChild(span);
 
 					spanWidth = div.offsetWidth;
+					if (spanWidth + BODY_MARGIN >= pageX) {
+						break;
+					}
+
 					focusOffset++;
 
 					if (focusOffset > textNode.textContent.length) {
