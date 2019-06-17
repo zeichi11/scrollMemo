@@ -13,8 +13,8 @@ class Selection extends Component {
 	 * @returns {number}
 	 */
 	getOffsetY(targetParagraph) {
-		let PARAGRAPH_PADDING_BOTTOM = 15,
-			paragraphList = this.props.paragraphs,
+		const PARAGRAPH_PADDING_BOTTOM = 15;
+		let	paragraphList = this.props.paragraphs,
 			styles = this.props.styles,
 			targetParagraphId,
 			paragraphId,
@@ -53,8 +53,8 @@ class Selection extends Component {
 	 * @returns {number|*}
 	 */
 	getOffsetX(targetParagraph, target, offset) {
-		let BODY_MARGIN = 8,
-			div = document.getElementById('dummy_wrap'),
+		const BODY_MARGIN = 8;
+		let	div = document.getElementById('dummy_wrap'),
 			div2 = document.createElement('DIV'),
 			spanList = targetParagraph.childNodes,
 			targetTextNode,

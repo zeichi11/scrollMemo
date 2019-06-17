@@ -4,8 +4,9 @@ let CommonUtils = {
 	// },
 
 	closest: function(el, fn) {
-		let DEPTH_LIMIT = 5,
-			depth = 0;
+		const DEPTH_LIMIT = 5;
+		let depth = 0;
+
 		while (depth < DEPTH_LIMIT) {
 			if (fn(el)) {
 				return el;

@@ -7,8 +7,8 @@ class Paragraph extends Component {
 	}
 
 	componentDidMount() {
-		let MARGIN_TOP = 16,
-			height = this.paragraph.offsetHeight;
+		const MARGIN_TOP = 16;
+		let height = this.paragraph.offsetHeight;
 		this.props.updateLineHeight(this.props.id, MARGIN_TOP + height);
 	}
 

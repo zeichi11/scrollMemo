@@ -41,8 +41,8 @@ class Editor extends Component {
 	 * @returns {number|*}
 	 */
 	getFocusOffset(paragraph, target, pageX) {
-		let BODY_MARGIN = 8,
-			div = document.getElementById('dummy_wrap'),
+		const BODY_MARGIN = 8;
+		let	div = document.getElementById('dummy_wrap'),
 			focusOffset = 0,
 			spanList = paragraph.childNodes,
 			targetTextNode,
