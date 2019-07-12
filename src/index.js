@@ -47,8 +47,6 @@
 
 
 
-
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
@@ -56,16 +54,26 @@ import { Provider } from 'react-redux';
 import reducers from './editor/reducers';
 import EditorContainer from './editor/EditorContainer';
 import IME from './editor/IME/IME'
-// import IME from './IME/IME';
 
+import ScrollMemo from './components/ScrollMemo';
 
-const rootElement = document.getElementById('editor');
+// const rootElement = document.getElementById('editor');
+// const store = createStore(reducers);
+//
+// ReactDOM.render(
+// 	<Provider store={store}>
+// 		<EditorContainer/>
+// 		<IME/>
+// 	</Provider>,
+// 	rootElement
+// );
+
+const rootEle = document.getElementById('root');
 const store = createStore(reducers);
 
 ReactDOM.render(
 	<Provider store={store}>
-		<EditorContainer/>
-		<IME/>
+		<ScrollMemo/>
 	</Provider>,
-	rootElement
+	rootEle
 );
