@@ -5,6 +5,8 @@ import CommonUtils from '../common/CommonUtils';
 class Selection extends Component {
 	constructor(props) {
 		super(props);
+
+		this.setFlicker = this.setFlicker.bind(this);
 	}
 
 	/**
@@ -102,14 +104,19 @@ class Selection extends Component {
 	 * 셀렉션의 깜빡이는 모션 설정
 	 */
 	setFlicker() {
-		let selection = this.selection;
-		selection.style.visibility = "visible";
+		let selection = this.selection,
+			flicker = () => {
+				let visibility;
+				if (this.props.ui.flicker) {
+					visibility = selection.style.visibility;
+					visibility = visibility === "visible" ? "hidden" : "visible";
+					selection.style.visibility = visibility;
+				} else {
+					selection.style.visibility = "visible";
+				}
+			};
 
-		setInterval(function () {
-			let visibility = selection.style.visibility;
-			visibility = visibility === "visible" ? "hidden" : "visible";
-			selection.style.visibility = visibility;
-		}, 450);
+		setInterval(flicker, 450);
 	}
 
 	/**
@@ -133,7 +140,7 @@ class Selection extends Component {
 					return inlineStyle;
 				}
 
-				let targetParagraph = CommonUtils.closestTag(this.props.anchorNode, 'P'),
+				let targetParagraph = CommonUtils.closestTag(this.props.extentNode, 'P'),
 					anchorNode = this.props.anchorNode,
 					anchorOffset = this.props.anchorOffset,
 					extentNode = this.props.extentNode,
@@ -144,7 +151,7 @@ class Selection extends Component {
 				}
 
 				inlineStyle.top = this.getOffsetY(targetParagraph) + 'px';
-				inlineStyle.left = this.getOffsetX(targetParagraph, anchorNode, anchorOffset) + 'px';
+				inlineStyle.left = this.getOffsetX(targetParagraph, extentNode, extentOffset) + 'px';
 				inlineStyle.height = parseInt(targetParagraph.style['line-height']) + 'px';
 
 				return inlineStyle;

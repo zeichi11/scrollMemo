@@ -57,23 +57,29 @@ import IME from './editor/IME/IME'
 
 import ScrollMemo from './components/ScrollMemo';
 
-// const rootElement = document.getElementById('editor');
-// const store = createStore(reducers);
-//
-// ReactDOM.render(
-// 	<Provider store={store}>
-// 		<EditorContainer/>
-// 		<IME/>
-// 	</Provider>,
-// 	rootElement
-// );
-
-const rootEle = document.getElementById('root');
+const rootElement = document.getElementById('editor');
 const store = createStore(reducers);
 
 ReactDOM.render(
 	<Provider store={store}>
-		<ScrollMemo/>
+		<EditorContainer/>
+		<IME/>
 	</Provider>,
-	rootEle
+	rootElement
 );
+
+// const rootEl = document.getElementById('root');
+// const store = createStore(reducers);
+//
+// ReactDOM.render(
+// 	<Provider store={store}>
+// 		<ScrollMemo/>
+// 	</Provider>,
+// 	rootEl
+// );
+
+
+
+
+
+

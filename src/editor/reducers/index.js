@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import paragraph from './paragraph';
 import style from './style';
 import selection from './selection';
+import ui from './ui';
 
 var document = {
 	paragraph: [
@@ -65,7 +66,8 @@ var document = {
 const reducers = combineReducers({
 	paragraph,
 	style,
-	selection
+	selection,
+	ui
 });
 
 export default reducers;

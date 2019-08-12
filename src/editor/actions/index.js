@@ -70,3 +70,12 @@ export function updateSelectionType(selectionType, isReverse) {
 		reverse: isReverse,
 	}
 }
+
+
+// ui
+export function updateUISelectionFlicker(flicker) {
+	return {
+		type: Constants.action.UI_UPDATE_SELECTION_FLICKER,
+		flicker: flicker,
+	}
+}

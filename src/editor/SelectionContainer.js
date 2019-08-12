@@ -7,6 +7,7 @@ const mapStateToProps = (state) => {
 	return {
 		paragraphs: state.paragraph,
 		styles: state.style,
+		ui: state.ui.selection,
 
 		anchorNode: state.selection.anchorNode,
 		anchorOffset: state.selection.anchorOffset,

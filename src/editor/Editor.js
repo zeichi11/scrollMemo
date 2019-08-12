@@ -20,7 +20,7 @@ class Editor extends Component {
 		this.handleMouseMove = this.handleMouseMove.bind(this);
 		this.handleMouseUp = this.handleMouseUp.bind(this);
 
-		this.getFocusOffset = this.getFocusOffset.bind(this);
+		this.getFocusInfo = this.getFocusInfo.bind(this);
 
 	}
 
@@ -35,31 +35,53 @@ class Editor extends Component {
 
 	/**
 	 *
-	 * @param paragraph
 	 * @param target
 	 * @param pageX
 	 * @returns {number|*}
 	 */
-	getFocusOffset(paragraph, target, pageX) {
+	getFocusInfo(target, pageX) {
 		const BODY_MARGIN = 8;
 		let	div = document.getElementById('dummy_wrap'),
+			paragraph,
+			focusNode,
 			focusOffset = 0,
-			spanList = paragraph.childNodes,
+			spanList,
 			targetTextNode,
 			textNode,
 			span,
 			spanWidth = 0,
+			prevTextWidth = 0,
 			i;
 
-		if (target.nodeName === 'SPAN') {
-			targetTextNode = target.firstChild;
+		if (target.nodeName !== 'P') {
+			paragraph = CommonUtils.closestTag(target, 'P');
+		} else {
+			paragraph = target;
 		}
+
+		spanList = paragraph.childNodes;
 
 		for (i = 0; i < spanList.length; i++) {
 			textNode = spanList[i].childNodes[0];
-			if (textNode === targetTextNode) {
-				span = document.createElement('SPAN');
-				span.style.whiteSpace = 'pre';
+			span = document.createElement('SPAN');
+			span.style.whiteSpace = 'pre';
+
+			span.innerHTML = '';
+			div.innerHTML = '';
+
+			span.appendChild(document.createTextNode(textNode.textContent));
+			div.appendChild(span);
+
+			if ((BODY_MARGIN + prevTextWidth) < pageX) {
+				if ((BODY_MARGIN + prevTextWidth + div.offsetWidth) > pageX) {
+					targetTextNode = textNode;
+				} else {
+					prevTextWidth += div.offsetWidth;
+				}
+			}
+
+			if (targetTextNode) {
+				focusNode = spanList[i];
 
 				while (true) {
 					span.innerHTML = '';
@@ -69,7 +91,7 @@ class Editor extends Component {
 					div.appendChild(span);
 
 					spanWidth = div.offsetWidth;
-					if (spanWidth + BODY_MARGIN >= pageX) {
+					if ((BODY_MARGIN + prevTextWidth) + spanWidth >= pageX) {
 						break;
 					}
 
@@ -80,29 +102,18 @@ class Editor extends Component {
 					}
 				}
 				break;
-
 			}
 		}
 
-		return focusOffset;
-	}
-
-	/**
-	 *
-	 * @param target
-	 * @param pageX
-	 * @returns {{node: *, offset: number}}
-	 */
-	getFocusInfo(target, pageX) {
-		let focusNode = target,
-			focusParagraph = CommonUtils.closestTag(focusNode, 'P'),
-			focusOffset = 0;
-
-		if (target.nodeName !== 'P') {
-			focusNode = CommonUtils.closestTag(target, 'SPAN');
-			focusOffset = this.getFocusOffset(focusParagraph, focusNode, pageX);
+		if (!targetTextNode) {
+			if (spanList.length > 0) {
+				focusNode = spanList[spanList.length - 1];
+				targetTextNode = focusNode.childNodes[0];
+				focusOffset = targetTextNode.textContent.length;
+			}
 		}
 
+		// return [targetTextNode, focusOffset];
 		return {
 			node: focusNode,
 			offset: focusOffset
@@ -118,9 +129,12 @@ class Editor extends Component {
 		console.log(e.target);
 
 		let focusInfo = this.getFocusInfo(e.target, e.pageX);
-		console.log(focusInfo.node, focusInfo.offset);
-		this.props.updateAnchor(focusInfo.node, focusInfo.offset);
-		this.isDragStart = true;
+		if (focusInfo !== null) {
+			console.log(focusInfo.node, focusInfo.offset);
+			this.props.updateAnchor(focusInfo.node, focusInfo.offset);
+			this.props.updateExtent(focusInfo.node, focusInfo.offset);
+			this.isDragStart = true;
+		}
 	}
 
 	/**
@@ -135,8 +149,15 @@ class Editor extends Component {
 			console.log(e.target);
 
 			focusInfo = this.getFocusInfo(e.target, e.pageX);
-			console.log(focusInfo.node, focusInfo.offset);
-			this.props.updateExtent(focusInfo.node, focusInfo.offset);
+			if (focusInfo) {
+				console.log(focusInfo.node, focusInfo.offset);
+				this.props.updateExtent(focusInfo.node, focusInfo.offset);
+
+				// 드래그하는 동안에는 셀렉션의 반짝거림을 멈춘다.
+				if (this.props.ui.selection.flicker) {
+					this.props.updateUISelectionFlicker(false);
+				}
+			}
 		}
 	}
 
@@ -150,6 +171,7 @@ class Editor extends Component {
 
 		if (this.isDragStart) {
 			this.isDragStart = false;
+			this.props.updateUISelectionFlicker(true);
 		}
 	}
 

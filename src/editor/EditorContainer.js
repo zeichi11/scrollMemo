@@ -10,7 +10,9 @@ const mapStateToProps = (state) => {
 		// number라는 props를 redux state의 counter 안에 있는 number 값으로 연결
 		paragraphs: state.paragraph,
 		// color props는 state의 ui의 color와 연결
-		styles: state.style
+		styles: state.style,
+		selection: state.selection,
+		ui: state.ui
 	}
 };
 
@@ -27,8 +29,11 @@ const mapDispatchToProps = (dispatch) => {
 
 		// updateSelection: (top, left, height) => {dispatch(actions.updateSelection(top, left, height))},
 		updateAnchor: (node, offset) => {dispatch(actions.updateAnchor(node, offset))},
-		updateExtent: (node, offset) => {dispatch(actions.updateExtent(node, offset))},
-		updateSelectionType: (selectionType, isReverse) => {dispatch(actions.updateSelectionType(selectionType, isReverse))}
+		updateExtent: (node, offset, flicker) => {dispatch(actions.updateExtent(node, offset, flicker))},
+		updateSelectionType: (selectionType, isReverse) => {dispatch(actions.updateSelectionType(selectionType, isReverse))},
+
+		// update ui
+		updateUISelectionFlicker: (flicker) => {dispatch(actions.updateUISelectionFlicker(flicker))}
 	}
 
 	//
