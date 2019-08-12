@@ -58,11 +58,11 @@ class IMEComponent extends Component {
 	}
 
 	handleOnBlur() {
-		this.imeInput.focus();
+		this.imeTextArea.focus();
 	}
 
 	componentDidMount() {
-		this.imeInput.focus();
+		this.imeTextArea.focus();
 
 		// this.imeInput.addEventListener('compositionstart', function (e) {
 		// 	console.log('-- compositionstart --');
@@ -88,19 +88,17 @@ class IMEComponent extends Component {
 
 	handleCompositionUpdate(e) {
 		console.log('-- compositionupdate --');
-		// console.log(this.imeInput.textContent);
 		console.log(e.data);
 		console.log('----------------------');
-		this.value = this.imeInput.value;
+		this.value = this.imeTextArea.value;
 	}
 
 	handleCompositionEnd(e) {
 		console.log('-- compositionend --');
-		// console.log(this.imeInput.value);
 		console.log(e.data);
 		console.log('----------------------');
 		//appen and clear
-		this.imeInput.value = '';
+		this.imeTextArea.value = '';
 		if (this.compositionStart) {
 			this.compositionStart = false;
 			// update cursor
@@ -109,27 +107,27 @@ class IMEComponent extends Component {
 
 	handleKeyDown(e) {
 		console.log('-- KeyDown --');
-		// console.log(this.imeInput.value);
-		this.value = this.imeInput.value;
+		// console.log(this.imeTextArea.value);
+		this.value = this.imeTextArea.value;
 		console.log('-------------');
 	}
 
 	handleKeyPress(e) {
 		console.log('-- KeyPress --');
-		// console.log(this.imeInput.value);
-		// this.value = this.imeInput.value;
+		console.log(this.imeTextArea.value);
+		// this.value = this.imeTextArea.value;
 		// console.log(this.value);
 		console.log('--------------');
 	}
 
 	handleKeyUp(e) {
 		console.log('-- KeyUp --');
-		// console.log(this.imeInput.value);
+		// console.log(this.imeTextArea.value);
 		console.log('-----------');
 		if (!this.compositionStart) {
-			this.value = this.imeInput.value;
+			this.value = this.imeTextArea.value;
 			console.log(this.value);
-			this.imeInput.value = '';
+			this.imeTextArea.value = '';
 
 			this.update(this.value);
 			// update cursor
@@ -138,23 +136,27 @@ class IMEComponent extends Component {
 
 	render() {
 		const imeInputStyle = {
-			'width': '400px',
-			'height': '300px'
+			'width': '100px',
+			'height': '100px'
 		};
 
 		return (
 			<div>
-				<input
-					ref={(ref)=>(this.imeInput = ref)}
-					onBlur={this.handleOnBlur}
-					onCompositionStart={this.handleCompositionStart}
-					onCompositionUpdate={this.handleCompositionUpdate}
-					onCompositionEnd={this.handleCompositionEnd}
-					onKeyDown={this.handleKeyDown}
-					onKeyPress={this.handleKeyPress}
-					onKeyUp={this.handleKeyUp}
-					style={imeInputStyle}
-				/>
+				<div style={{"width":"0px", "height":"3px", "overflow": "hidden"}}>
+					<textarea
+						 ref={(ref)=>(this.imeTextArea = ref)}
+						 // style={imeInputStyle}
+						 onBlur={this.handleOnBlur}
+						 onCompositionStart={this.handleCompositionStart}
+						 onCompositionUpdate={this.handleCompositionUpdate}
+						 onCompositionEnd={this.handleCompositionEnd}
+						 onKeyDown={this.handleKeyDown}
+						 onKeyPress={this.handleKeyPress}
+						 onKeyUp={this.handleKeyUp}
+					>
+					</textarea>
+				</div>
+
 			</div>
 		);
 	}
