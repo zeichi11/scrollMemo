@@ -10,6 +10,10 @@ class KeyHandler {
 
 	}
 
+	processInput() {
+
+	}
+
 	bindKeyDownEvent() {
 		this.bindTarget.onkeydown = this.handleKeyDown;
 	}

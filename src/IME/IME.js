@@ -8,9 +8,10 @@ export default connect(
 	// 	}
     //
 	// },
-	state => {
+	(state, props) => {
 		return {
-			selection: state.selection
+			selection: state.selection,
+			observer: props.observer
 		}
 	}
 )(IMEComponent);
