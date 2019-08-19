@@ -152,7 +152,80 @@ export default IMEKeyHandler;
 
 
 
-
+// var Const = {
+// 	KeyCode: {
+// 		BACKSPACE: 8,
+// 		TAB: 9,
+// 		ENTER: 13,
+// 		SHIFT: 16,
+// 		CTRL: 17,
+// 		ALT: 18,
+// 		ESC: 27,
+// 		SPACE: 32,
+// 		PAGEUP: 33,
+// 		PAGEDOWN: 34,
+// 		END: 35,
+// 		HOME: 36,
+// 		LEFT: 37,
+// 		UP: 38,
+// 		RIGHT: 39,
+// 		DOWN: 40,
+// 		INSERT: 45,
+// 		DELETE: 46,
+// 		CHAR_A: 65,
+// 		CHAR_B: 66,
+// 		CHAR_C: 67,
+// 		CHAR_D: 68,
+// 		CHAR_E: 69,
+// 		CHAR_G: 71,
+// 		CHAR_I: 73,
+// 		CHAR_L: 76,
+// 		CHAR_P: 80,
+// 		CHAR_R: 82,
+// 		CHAR_S: 83,
+// 		CHAR_U: 85,
+// 		CHAR_V: 86,
+// 		CHAR_X: 88,
+// 		CHAR_Y: 89,
+// 		CHAR_Z: 90,
+// 		LEFT_COMMAND: 91,
+// 		RIGHT_COMMAND: 93,
+// 		F1: 112,
+// 		F2: 113,
+// 		F5: 116,
+// 		F10: 121,
+// 		SLASH: 191,
+// 		LEFT_SQUARE_BRACKET: 219,
+// 		RIGHT_SQUARE_BRACKET: 221,
+// 		// keyCode 229 - http://lists.w3.org/Archives/Public/www-dom/2010JulSep/att-0182/keyCode-spec.html
+// 		IME_PROCESSING: 229,
+// 		// IE 11 에서는 한자에 대한 keyCode 가 발생하지 않으므로,
+// 		// 한글 -> 한자 변환 시 가상의 keyCode 를 넘겨주도록 한다.
+// 		CHINESE_IN_HANGUL_INPUT: -229
+// 	},
+//
+// 	Shortcut: {
+// 		Text: {
+// 			SELECT_ALL: 10000
+// 		},
+// 		Shape: {},
+// 		Slide: {
+// 			SELECT_ALL: 40000
+// 		}
+// 	},
+//
+// 	FontSizeList: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10.5, 11, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 54, 60,
+// 		66, 72, 80, 88, 96, 115, 138, 166, 199, 239, 287, 344, 413 ],
+//
+// 	ModKeyStatus: {
+// 		ALT_KEY_PRESS:   0x1,
+// 		CMD_KEY_PRESS:   0x2,
+// 		SHIFT_KEY_PRESS: 0x4,
+// 		CTRL_KEY_PRESS:  0x8
+// 	},
+//
+// 	KEY_PRESS_NONE: 0x0
+// }
 
 
 
