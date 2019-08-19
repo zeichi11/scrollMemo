@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import IMEKeyHandler from './IMEKeyHandler';
+import IME from './IME';
 
 class IMEComponent extends Component {
 	/**
@@ -18,7 +18,7 @@ class IMEComponent extends Component {
 		this.handleKeyPress = this.handleKeyPress.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 
-		this.IMEKeyHandler = new IMEKeyHandler(props.keyHandler);
+		this.IME = new IME(props.keyHandler);
 	}
 
 	/**
@@ -40,7 +40,7 @@ class IMEComponent extends Component {
 	 * @param e
 	 */
 	handleCompositionStart(e) {
-		this.IMEKeyHandler.startComposition(e);
+		this.IME.startComposition(e);
 	}
 
 	/**
@@ -48,7 +48,7 @@ class IMEComponent extends Component {
 	 * @param e
 	 */
 	handleCompositionUpdate(e) {
-		this.IMEKeyHandler.updateComposition(e);
+		this.IME.updateComposition(e);
 	}
 
 	/**
@@ -56,7 +56,7 @@ class IMEComponent extends Component {
 	 * @param e
 	 */
 	handleCompositionEnd(e) {
-		this.IMEKeyHandler.endComposition(e);
+		this.IME.endComposition(e);
 	}
 
 	/**
@@ -64,7 +64,7 @@ class IMEComponent extends Component {
 	 * @param e
 	 */
 	handleKeyDown(e) {
-		this.IMEKeyHandler.handleKeyDown(e);
+		this.IME.handleKeyDown(e);
 	}
 
 	/**
@@ -72,7 +72,7 @@ class IMEComponent extends Component {
 	 * @param e
 	 */
 	handleKeyUp(e) {
-		this.IMEKeyHandler.handleKeyUp(e);
+		this.IME.handleKeyUp(e);
 	}
 
 	/**
@@ -80,7 +80,7 @@ class IMEComponent extends Component {
 	 * @param e
 	 */
 	handleKeyPress(e) {
-		this.IMEKeyHandler.handleKeyPress(e);
+		this.IME.handleKeyPress(e);
 	}
 
 	render() {
