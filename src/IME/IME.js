@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import Constants from './IMEConstants';
 import IMEOperationManager from './operation/IMEOperationManager';
 
-class IMEKeyHandler {
+class IME {
 	/**
 	 * constructor
 	 * @param {object} observer
 	 */
-	constructor(observer) {
+	constructor(observer, imeView) {
 		this.value = '';
 		this.compositionStart = false;
 		this.observer = null;
@@ -25,6 +25,7 @@ class IMEKeyHandler {
 		this.removeObserver = this.removeObserver.bind(this);
 
 		this.addObserver(observer);
+		this.imeView = imeView;
 	}
 
 	/**
@@ -145,7 +146,7 @@ class IMEKeyHandler {
 	}
 }
 
-export default IMEKeyHandler;
+export default IME;
 
 
 

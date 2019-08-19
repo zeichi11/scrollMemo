@@ -18,21 +18,21 @@ class IMEComponent extends Component {
 		this.handleKeyPress = this.handleKeyPress.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 
-		this.IME = new IME(props.keyHandler);
+		this.IME = new IME(props.keyHandler, this.imeView);
 	}
 
 	/**
 	 * handle Blur
 	 */
 	handleOnBlur() {
-		this.imeTextArea.focus();
+		this.imeView.focus();
 	}
 
 	/**
 	 *
 	 */
 	componentDidMount() {
-		this.imeTextArea.focus();
+		this.imeView.focus();
 	}
 
 	/**
@@ -93,7 +93,7 @@ class IMEComponent extends Component {
 			<div>
 				<div style={{"width":"0px", "height":"3px", "overflow": "hidden"}}>
 					<textarea
-						 ref={(ref)=>(this.imeTextArea = ref)}
+						 ref={(ref)=>(this.imeView = ref)}
 						 // style={imeInputStyle}
 						 onBlur={this.handleOnBlur}
 						 onCompositionStart={this.handleCompositionStart}
