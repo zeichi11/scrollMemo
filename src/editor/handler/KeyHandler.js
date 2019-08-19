@@ -1,25 +1,11 @@
 class KeyHandler {
-
-	constructor(bindTarget) {
-		this.bindTarget = bindTarget;
+	constructor() {
 		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
-		this.bindKeyDownEvent();
-		this.bindKeyUpEvent();
-
-
 	}
 
 	processInput() {
 
-	}
-
-	bindKeyDownEvent() {
-		this.bindTarget.onkeydown = this.handleKeyDown;
-	}
-
-	bindKeyUpEvent() {
-		this.bindTarget.onkeyup = this.handleKeyUp;
 	}
 
 	handleKeyDown(e) {

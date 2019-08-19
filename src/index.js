@@ -53,19 +53,19 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import reducers from './editor/reducers';
 import EditorContainer from './editor/EditorContainer';
-import IME from './IME/IME';
+import IMEContainer from './IME/IMEContainer';
 import KeyHandler from './editor/handler/KeyHandler';
 
 import ScrollMemo from './components/ScrollMemo';
 
 const rootElement = document.getElementById('editor');
 const store = createStore(reducers);
-const keyHandler = new KeyHandler();
+const editorKeyHandler = new KeyHandler();
 
 ReactDOM.render(
 	<Provider store={store}>
 		<EditorContainer/>
-		<IME observer={keyHandler}/>
+		<IMEContainer observer={editorKeyHandler}/>
 	</Provider>,
 	rootElement
 );
