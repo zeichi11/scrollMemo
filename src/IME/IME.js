@@ -1,16 +1,21 @@
-import React, { Component } from 'react';
-import Constants from './IMEConstants';
+import Constants from './common/Constants';
+import CommonUtils from './common/CommonUtils';
+import Chrome from './browser/Chrome'
+import FireFox from './browser/Firefox'
+import IE from './browser/MSIE'
 import IMEOperationManager from './operation/IMEOperationManager';
 
 class IME {
 	/**
 	 * constructor
-	 * @param {object} observer
+	 * @param {object} keyHandler
+	 * @param {object} imeView
 	 */
-	constructor(observer, imeView) {
+	constructor(keyHandler, imeView) {
 		this.value = '';
 		this.compositionStart = false;
-		this.observer = null;
+		this.keyHandler = null;
+		this.browser = null;
 
 		this.startComposition = this.startComposition.bind(this);
 		this.updateComposition = this.updateComposition.bind(this);
@@ -21,10 +26,11 @@ class IME {
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 
 		this.createOperation = this.createOperation.bind(this);
-		this.addObserver = this.addObserver.bind(this);
-		this.removeObserver = this.removeObserver.bind(this);
+		this.addKeyHandler = this.addKeyHandler.bind(this);
+		this.removeKeyHandler = this.removeKeyHandler.bind(this);
 
-		this.addObserver(observer);
+		this.addKeyHandler(keyHandler);
+		this.setBrowser();
 		this.imeView = imeView;
 	}
 
@@ -42,107 +48,130 @@ class IME {
 
 	/**
 	 *
-	 * @param {object} observer
+	 * @param {object} keyHandler
 	 */
-	addObserver(observer) {
-		this.observer = observer;
+	addKeyHandler(keyHandler) {
+		this.keyHandler = keyHandler;
 	}
 
 	/**
 	 *
 	 */
-	removeObserver() {
-		this.observer = null;
+	removeKeyHandler() {
+		this.keyHandler = null;
+	}
+
+	/**
+	 *
+	 */
+	setBrowser() {
+		switch (CommonUtils.getBrowser()) {
+			case Constants.browserType.CHROME:
+				this.browser = new Chrome();
+				break;
+			case Constants.browserType.FIREFOX:
+				this.browser = new FireFox();
+				break;
+			case Constants.browserType.EDGE:
+				this.browser = new Edge();
+				break;
+			case Constants.browserType.MSIE:
+				this.browser = new Msie();
+				break;
+		}
+	}
+
+	/**
+	 *
+	 * @param {object} e
+	 * @param {string} opType
+	 * @param {string} value
+	 */
+	executeHandler(e, opType, value) {
+		let eventType = e.type,
+			executeFunc,
+			op = this.createOperation(e, opType, value);
+
+		switch (eventType) {
+			case Constants.eventType.COMP_START:
+				executeFunc = this.keyHandler.startComposition;
+				break;
+			case Constants.eventType.COMP_UPDATE:
+				executeFunc = this.keyHandler.updateComposition;
+				break;
+			case Constants.eventType.COMP_END:
+				executeFunc = this.keyHandler.endComposition;
+				break;
+			case Constants.eventType.KEYDOWN:
+				executeFunc = this.keyHandler.handleKeyDown;
+				break;
+			case Constants.eventType.KEYUP:
+				executeFunc = this.keyHandler.handleKeyUp;
+				break;
+			case Constants.eventType.KEYPRESS:
+				executeFunc = this.keyHandler.handleKeyPress;
+				break;
+		}
+
+		executeFunc(op);
 	}
 
 	/**
 	 * handle composition start
-	 * @param e
+	 * @param {object} e
 	 */
 	startComposition(e) {
-		console.log('-- compositionstart --');
-		console.log(e.data);
-		console.log('----------------------');
-
-		// let target = e.target;
-		this.compositionStart = true;
-		this.observer.startComposition(this.createOperation(e, Constants.opType.START_COMP, e.data));
+		let data = this.browser.startComposition(e);
+		this.executeHandler(e, Constants.opType.START_COMP, data);
 	}
 
 	/**
 	 * handle composition update
-	 * @param e
+	 * @param {object} e
 	 */
 	updateComposition(e) {
-		console.log('-- compositionupdate --');
-		console.log(e.data);
-		console.log('----------------------');
-
-		let target = e.target;
-		this.value = target.value;
-		this.observer.updateComposition(this.createOperation(e, Constants.opType.UPDATE_COMP, e.data));
+		let data = this.browser.updateComposition(e);
+		this.executeHandler(e, Constants.opType.UPDATE_COMP, data);
 	}
 
 	/**
 	 * handle composition end
-	 * @param e
+	 * @param {object} e
 	 */
 	endComposition(e) {
-		console.log('-- compositionend --');
-		console.log(e.data);
-		console.log('----------------------');
-
-		let target = e.target;
-		target.value = '';
-		if (this.compositionStart) {
-			this.observer.endComposition(this.createOperation(e, Constants.opType.END_COMP, e.data));
-			this.compositionStart = false;
+		let date = this.browser.endComposition(e);
+		if (data) {
+			this.executeHandler(e, Constants.opType.END_COMP, data);
 		}
 	}
 
 	/**
 	 * handle key down
-	 * @param e
+	 * @param {object} e
 	 */
 	handleKeyDown(e) {
-		let target = e.target;
-		this.value = target.value;
-
-		console.log('-- KeyDown --');
-		console.log(this.value);
-		console.log('-------------');
-
-		this.observer.handleKeyDown(this.createOperation(e, Constants.opType.KEY_DOWN, e.data));
+		let data = this.browser.handleKeyDown(e);
+		this.executeHandler(e, Constants.opType.KEY_DOWN, data);
 	}
 
 	/**
 	 * handle key up
-	 * @param e
+	 * @param {object} e
 	 */
 	handleKeyUp(e) {
-		let target = e.target;
-		this.value = target.value;
-
-		console.log('-- KeyUp --');
-		console.log(this.value);
-		console.log('-------------');
-
-		this.observer.handleKeyUp(this.createOperation(e, Constants.opType.KEY_UP, e.data));
+		let data = this.browser.handleKeyUp(e);
+		this.executeHandler(e, Constants.opType.KEY_UP, data);
 	}
 
 	/**
 	 * handle key press
-	 * @param e
+	 * @param {object} e
 	 */
 	handleKeyPress(e) {
-		let target = e.target;
-		this.value = target.value;
-
-		console.log('-- KeyPress --');
-		console.log(this.value);
-		console.log('-------------');
-
-		this.observer.handleKeyPress(this.createOperation(e, Constants.opType.KEY_PRESS, e.data));
+		let data = this.browser.handleKeyPress(e);
+		if (data) {
+			this.executeHandler(e, Constants.opType.KEY_PRESS, data);
+		}
 	}
 }
 

@@ -65,7 +65,7 @@ const editorKeyHandler = new KeyHandler();
 ReactDOM.render(
 	<Provider store={store}>
 		<EditorContainer/>
-		<IMEContainer observer={editorKeyHandler}/>
+		<IMEContainer keyHandler={editorKeyHandler}/>
 	</Provider>,
 	rootElement
 );
