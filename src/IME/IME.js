@@ -4,18 +4,22 @@ import Chrome from './browser/Chrome'
 import Firefox from './browser/Firefox'
 import IE from './browser/MSIE'
 import IMEOperationManager from './operation/IMEOperationManager';
+import OperationExecutor from './operation/OperationExecutor';
 
 class IME {
 	/**
 	 * constructor
-	 * @param {object} keyHandler
+	 * @param {object} keyHandlers
 	 * @param {object} imeView
 	 */
-	constructor(keyHandler, imeView) {
+	constructor(keyHandlers, imeView) {
 		this.value = '';
 		this.compositionStart = false;
-		this.keyHandler = null;
+		this.keyHandlers = null;
+		this.handleInput = null;
+		this.handlePress = null;
 		this.browser = null;
+		this.opExecutor = OperationExecutor.getInstance(keyHandlers);
 
 		this.startComposition = this.startComposition.bind(this);
 		this.updateComposition = this.updateComposition.bind(this);
@@ -26,10 +30,10 @@ class IME {
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 
 		this.createOperation = this.createOperation.bind(this);
-		this.addKeyHandler = this.addKeyHandler.bind(this);
+		this.attachKeyHandlers = this.attachKeyHandlers.bind(this);
 		this.removeKeyHandler = this.removeKeyHandler.bind(this);
 
-		this.addKeyHandler(keyHandler);
+		this.attachKeyHandlers(keyHandlers);
 		this.setBrowser();
 		this.imeView = imeView;
 	}
@@ -44,21 +48,6 @@ class IME {
 	createOperation(e, type, data) {
 		const opManager = IMEOperationManager.getInstance();
 		return opManager.createOperation(e, type, data);
-	}
-
-	/**
-	 *
-	 * @param {object} keyHandler
-	 */
-	addKeyHandler(keyHandler) {
-		this.keyHandler = keyHandler;
-	}
-
-	/**
-	 *
-	 */
-	removeKeyHandler() {
-		this.keyHandler = null;
 	}
 
 	/**
@@ -88,32 +77,8 @@ class IME {
 	 * @param {string} value
 	 */
 	executeHandler(e, opType, value) {
-		let eventType = e.type,
-			executeFunc,
-			op = this.createOperation(e, opType, value);
-
-		switch (eventType) {
-			case Constants.eventType.COMP_START:
-				executeFunc = this.keyHandler.startComposition;
-				break;
-			case Constants.eventType.COMP_UPDATE:
-				executeFunc = this.keyHandler.updateComposition;
-				break;
-			case Constants.eventType.COMP_END:
-				executeFunc = this.keyHandler.endComposition;
-				break;
-			case Constants.eventType.KEYDOWN:
-				executeFunc = this.keyHandler.handleKeyDown;
-				break;
-			case Constants.eventType.KEYUP:
-				executeFunc = this.keyHandler.handleKeyUp;
-				break;
-			case Constants.eventType.KEYPRESS:
-				executeFunc = this.keyHandler.handleKeyPress;
-				break;
-		}
-
-		executeFunc(op);
+		let op = this.createOperation(e, opType, value);
+		this.opExecutor.execute(op);
 	}
 
 	/**
@@ -139,7 +104,7 @@ class IME {
 	 * @param {object} e
 	 */
 	endComposition(e) {
-		let date = this.browser.endComposition(e);
+		let data = this.browser.endComposition(e);
 		if (data) {
 			this.executeHandler(e, Constants.opType.END_COMP, data);
 		}

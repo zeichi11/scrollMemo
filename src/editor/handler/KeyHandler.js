@@ -4,7 +4,7 @@ class KeyHandler {
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 	}
 
-	processInput() {
+	handleInput() {
 
 	}
 
@@ -14,6 +14,11 @@ class KeyHandler {
 	}
 
 	handleKeyUp(e) {
+		// console.log('-- mouseup --');
+		// console.log(e.target);
+	}
+
+	handleKeyPress(e) {
 		// console.log('-- mouseup --');
 		// console.log(e.target);
 	}

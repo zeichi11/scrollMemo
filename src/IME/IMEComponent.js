@@ -18,7 +18,7 @@ class IMEComponent extends Component {
 		this.handleKeyPress = this.handleKeyPress.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 
-		this.IME = new IME(props.keyHandler, this.imeView);
+		this.IME = new IME(props.keyHandlers, this.imeView);
 	}
 
 	/**

@@ -45,8 +45,6 @@
 //     rootElement
 // );
 
-
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
@@ -60,12 +58,18 @@ import ScrollMemo from './components/ScrollMemo';
 
 const rootElement = document.getElementById('editor');
 const store = createStore(reducers);
-const editorKeyHandler = new KeyHandler();
+const KeyHandler = new KeyHandler();
+const keyHandlers = {
+	'handleInfput': KeyHandler.handleInput,
+	'handleKeyDown': KeyHandler.handleKeyDown,
+	'handleKeyUp': KeyHandler.handleKeyUp,
+	'handleKeyPress': KeyHandler.handleKeyPress
+};
 
 ReactDOM.render(
 	<Provider store={store}>
 		<EditorContainer/>
-		<IMEContainer keyHandler={editorKeyHandler}/>
+		<IMEContainer keyHandlers={keyHandlers}/>
 	</Provider>,
 	rootElement
 );

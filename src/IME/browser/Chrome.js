@@ -1,8 +1,6 @@
 class Chrome {
 	/**
 	 * constructor
-	 * @param {object} keyHandler
-	 * @param {object} imeView
 	 */
 	constructor() {
 		this.value = '';

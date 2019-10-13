@@ -11,19 +11,21 @@ class IMEOperationManager {
         this.createOperation = this.createOperation.bind(this);
     }
 
-    createOperation(event, type, data) {
+    createOperation(event, type, char, keyCode) {
         return {
             type,
             event,
-            data
+			char,
+			keyCode
         }
     }
 
-    getOperation(event, type, data) {
+    getOperation(event, type, char, keyCode) {
     	return {
     		type,
 			event,
-			data
+			char,
+			keyCode
 		}
 	}
 }

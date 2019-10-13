@@ -11,7 +11,7 @@ export default connect(
     (state, props) => {
         return {
             selection: state.selection,
-            keyHandler: props.keyHandler
+            keyHandlers: props.keyHandlers
         }
     }
 )(IMEComponent);

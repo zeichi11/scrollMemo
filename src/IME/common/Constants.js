@@ -16,6 +16,7 @@ export default {
 		COMP_START: 'compositionstart',
 		COMP_UPDATE: 'compositionupdate',
 		COMP_END: 'compositionend',
+		INPUT: 'input',
 		KEYDOWN: 'keydown',
 		KEYUP: 'keyup',
 		KEYPRESS: 'keypress',
