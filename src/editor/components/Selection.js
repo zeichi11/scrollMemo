@@ -16,6 +16,7 @@ class Selection extends Component {
 	 */
 	getOffsetY(targetParagraph) {
 		const PARAGRAPH_PADDING_BOTTOM = 15;
+		const editorTop = document.getElementById('editor').offsetTop;
 		let	paragraphList = this.props.paragraphs,
 			styles = this.props.styles,
 			targetParagraphId,
@@ -44,7 +45,7 @@ class Selection extends Component {
 			}
 		}
 
-		return top;
+		return editorTop + top;
 	}
 
 	/**
@@ -56,6 +57,7 @@ class Selection extends Component {
 	 */
 	getOffsetX(targetParagraph, target, offset) {
 		const BODY_MARGIN = 8;
+		const editorLeft = document.getElementById('editor').offsetLeft;
 		let	div = document.getElementById('dummy_wrap'),
 			div2 = document.createElement('DIV'),
 			spanList = targetParagraph.childNodes,
@@ -97,7 +99,7 @@ class Selection extends Component {
 		left = div.offsetWidth + BODY_MARGIN;
 		div.innerHTML = '';
 
-		return left;
+		return editorLeft + left;
 	}
 
 	/**

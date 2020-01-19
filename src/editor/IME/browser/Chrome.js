@@ -4,6 +4,7 @@ class Chrome {
 	 */
 	constructor() {
 		this.value = '';
+		this.data = '';
 		this.compositionStart = false;
 
 		this.startComposition = this.startComposition.bind(this);
@@ -27,7 +28,8 @@ class Chrome {
 
 		// let target = e.target;
 		this.compositionStart = true;
-		return e.data;
+		this.data = e.data;
+		return this.data;
 	}
 
 	/**
@@ -40,9 +42,10 @@ class Chrome {
 		console.log(e.type);
 		console.log('----------------------');
 
-		let target = e.target;
-		this.value = target.value;
-		return e.data;
+		if (this.compositionStart) {
+			this.data = e.data;
+		}
+		return this.data;
 	}
 
 	/**
@@ -55,11 +58,10 @@ class Chrome {
 		console.log(e.type);
 		console.log('----------------------');
 
-		let target = e.target;
-		target.value = '';
 		if (this.compositionStart) {
 			this.compositionStart = false;
-			return e.data;
+			this.data = '';
+			return this.data;
 		}
 	}
 
@@ -92,8 +94,8 @@ class Chrome {
 		console.log(e.type);
 		console.log('-------------');
 
-		if (this.compositionStart) {
-			this.compositionStart = false;
+		if (!this.compositionStart) {
+			this.value = '';
 		}
 
 		// if (!compLang) {

@@ -23,9 +23,17 @@ const mapDispatchToProps = (dispatch) => {
 		// actions.increment() (action 생성함수)에서 만든 action을 dispatch
 		// handleIncrement props를 실행하면 dispatch(increment)가 실행
 		updateLineHeight: (id, height) => {dispatch(actions.updateLineHeight(id, height))},
-		handleParagraphInsertion: () => {dispatch(actions.insertParagraph())},
-		handleParagraphDeletion: () => {dispatch(actions.deleteParagraph())},
-		// 전달인자를 넣을 수도 있다.
+		insertParagraph: () => {dispatch(actions.insertParagraph())},
+		updateParagraph: () => {dispatch(actions.updateParagraph())},
+		deleteParagraph: () => {dispatch(actions.deleteParagraph())},
+
+		insertText: (pId, offset, value) => {dispatch(actions.insertText(pId, offset, value))},
+		updateText: (pId, offset, value) => {dispatch(actions.updateText(pId, offset, value))},
+		deleteText: (pId, offset) => {dispatch(actions.deleteText(pId, offset))},
+
+		insertFormat: () => {dispatch(actions.insertFormat())},
+		updateFormat: () => {dispatch(actions.updateFormat())},
+		deleteFormat: () => {dispatch(actions.deleteFormat())},
 
 		// updateSelection: (top, left, height) => {dispatch(actions.updateSelection(top, left, height))},
 		updateAnchor: (node, offset) => {dispatch(actions.updateAnchor(node, offset))},

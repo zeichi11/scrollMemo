@@ -14,24 +14,67 @@ export function insertParagraph() {
 	};
 }
 
+export function updateParagraph() {
+	return {
+		type: Constants.action.UPDATE_PARAGRAPH
+	}
+}
+
 export function deleteParagraph() {
 	return {
 		type: Constants.action.DELETE_PARAGRAPH
 	}
 }
 
-export function updateSpan() {
+
+
+export function insertText(pId, offset, value) {
 	return {
-		type: Constants.action.UPDATE_SPAN
+		type: Constants.action.INSERT_TEXT,
+		payload: {
+			pId,
+			offset,
+			value
+		}
 	}
 }
 
+export function updateText(pId, offset, value) {
+	return {
+		type: Constants.action.UPDATE_TEXT,
+		payload: {
+			pId,
+			offset,
+			value
+		}
+	}
+}
+
+export function deleteText(pId, offset) {
+	return {
+		type: Constants.action.DELETE_TEXT,
+		payload: {
+			pId,
+			offset
+		}
+	}
+}
+
+
+
+// insert span
 export function insertFormat() {
 	return {
 		type: Constants.action.INSERT_FORMAT
 	}
 }
-
+// update span
+export function updateFormat() {
+	return {
+		type: Constants.action.UPDATE_FORMAT
+	}
+}
+// delete span
 export function deleteFormat() {
 	return {
 		type: Constants.action.DELETE_FORMAT

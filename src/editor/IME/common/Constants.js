@@ -12,14 +12,22 @@ export default {
 		WIN: 'Win',
 		TRIDENT: 'Trident'
 	},
+	callback: {
+		INPUT: 'input',
+		COMPOSING: 'composing',
+		KEY_DOWN: 'keydown',
+		KEY_UP: 'keyup',
+		KEY_PRESS: 'keypress'
+	},
 	eventType: {
 		COMP_START: 'compositionstart',
 		COMP_UPDATE: 'compositionupdate',
 		COMP_END: 'compositionend',
 		INPUT: 'input',
-		KEYDOWN: 'keydown',
-		KEYUP: 'keyup',
-		KEYPRESS: 'keypress',
+		COMPOSING: 'composing',
+		KEY_DOWN: 'keydown',
+		KEY_UP: 'keyup',
+		KEY_PRESS: 'keypress',
 
 	},
 	browserType: {

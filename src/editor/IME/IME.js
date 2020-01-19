@@ -29,29 +29,14 @@ class IME {
 		this.handleKeyPress = this.handleKeyPress.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 
+		this.executeOperation = this.executeOperation.bind(this);
 		this.createOperation = this.createOperation.bind(this);
-		this.attachKeyHandlers = this.attachKeyHandlers.bind(this);
-		this.removeKeyHandler = this.removeKeyHandler.bind(this);
-
-		this.attachKeyHandlers(keyHandlers);
 		this.setBrowser();
 		this.imeView = imeView;
 	}
 
 	/**
-	 * create IME operation
-	 * @param {object} e
-	 * @param {string} type
-	 * @param {string} data
-	 * @returns {{data, type, event}}
-	 */
-	createOperation(e, type, data) {
-		const opManager = IMEOperationManager.getInstance();
-		return opManager.createOperation(e, type, data);
-	}
-
-	/**
-	 *
+	 * set current browser.
 	 */
 	setBrowser() {
 		switch (CommonUtils.getBrowser()) {
@@ -71,13 +56,22 @@ class IME {
 	}
 
 	/**
-	 *
+	 * create IME operation
 	 * @param {object} e
-	 * @param {string} opType
-	 * @param {string} value
+	 * @param {string} type
+	 * @param {string} data
+	 * @returns {{data, type, event}}
 	 */
-	executeHandler(e, opType, value) {
-		let op = this.createOperation(e, opType, value);
+	createOperation(e, type, data) {
+		const opManager = IMEOperationManager.getInstance();
+		return opManager.createOperation(e, type, data);
+	}
+
+	/**
+	 *
+	 * @param {object} op
+	 */
+	executeOperation(op) {
 		this.opExecutor.execute(op);
 	}
 
@@ -86,8 +80,9 @@ class IME {
 	 * @param {object} e
 	 */
 	startComposition(e) {
-		let data = this.browser.startComposition(e);
-		this.executeHandler(e, Constants.opType.START_COMP, data);
+		let data = this.browser.startComposition(e),
+			op = this.createOperation(e, Constants.opType.START_COMP, data);
+		this.executeOperation(op);
 	}
 
 	/**
@@ -95,8 +90,9 @@ class IME {
 	 * @param {object} e
 	 */
 	updateComposition(e) {
-		let data = this.browser.updateComposition(e);
-		this.executeHandler(e, Constants.opType.UPDATE_COMP, data);
+		let data = this.browser.updateComposition(e),
+			op = this.createOperation(e, Constants.opType.INPUT, data);
+		this.executeOperation(op);
 	}
 
 	/**
@@ -104,9 +100,10 @@ class IME {
 	 * @param {object} e
 	 */
 	endComposition(e) {
-		let data = this.browser.endComposition(e);
+		let data = this.browser.endComposition(e),
+			op = this.createOperation(e, Constants.opType.END_COMP, data);
 		if (data) {
-			this.executeHandler(e, Constants.opType.END_COMP, data);
+			this.executeOperation(op);
 		}
 	}
 
@@ -115,8 +112,9 @@ class IME {
 	 * @param {object} e
 	 */
 	handleKeyDown(e) {
-		let data = this.browser.handleKeyDown(e);
-		this.executeHandler(e, Constants.opType.KEY_DOWN, data);
+		let data = this.browser.handleKeyDown(e),
+			op = this.createOperation(e, Constants.opType.KEY_DOWN, data);
+		this.executeOperation(op);
 	}
 
 	/**
@@ -124,8 +122,9 @@ class IME {
 	 * @param {object} e
 	 */
 	handleKeyUp(e) {
-		let data = this.browser.handleKeyUp(e);
-		this.executeHandler(e, Constants.opType.KEY_UP, data);
+		let data = this.browser.handleKeyUp(e),
+			op = this.createOperation(e, Constants.opType.KEY_UP, data);
+		this.executeOperation(op);
 	}
 
 	/**
@@ -133,9 +132,10 @@ class IME {
 	 * @param {object} e
 	 */
 	handleKeyPress(e) {
-		let data = this.browser.handleKeyPress(e);
+		let data = this.browser.handleKeyPress(e),
+			op = this.createOperation(e, Constants.opType.KEY_PRESS, data);
 		if (data) {
-			this.executeHandler(e, Constants.opType.KEY_PRESS, data);
+			this.executeOperation(op);
 		}
 	}
 }

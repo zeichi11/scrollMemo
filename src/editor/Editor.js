@@ -14,14 +14,13 @@ class Editor extends Component {
 
 		this.isDragStart = false;
 
-		this.keyHandler = new KeyHandler(document.getElementById('editor'));
+		this.keyHandler = new KeyHandler(document.getElementById('noteWrapper'));
 
 		this.handleMouseDown = this.handleMouseDown.bind(this);
 		this.handleMouseMove = this.handleMouseMove.bind(this);
 		this.handleMouseUp = this.handleMouseUp.bind(this);
 
 		this.getFocusInfo = this.getFocusInfo.bind(this);
-
 	}
 
 	/**
@@ -201,7 +200,7 @@ class Editor extends Component {
 				// ContactInfo 컴포넌트의 props에 contact와 key를 설정함
 				return (
 					<Paragraph
-						class={"editor_paragraph"}
+						class={'editorParagraph'}
 						key={i}
 						index={i}
 						id={pid}
@@ -216,18 +215,17 @@ class Editor extends Component {
 		};
 
 		return (
-			<div>
-				<div
-					id={"wrapper"}
-					onMouseDown={this.handleMouseDown}
-					onMouseMove={this.handleMouseMove}
-					onMouseUp={this.handleMouseUp}
-					ref = {ref => {this.wrapper = ref}}
-				>
-					{renderParagraphs(this.props.paragraphs, this.props.styles)}
-				</div>
+			<div
+				id={'editor'}
+				onMouseDown={this.handleMouseDown}
+				onMouseMove={this.handleMouseMove}
+				onMouseUp={this.handleMouseUp}
+				ref = {ref => {this.editor = ref}}
+			>
+				{renderParagraphs(this.props.paragraphs, this.props.styles)}
 				<SelectionContainer onMouseUp={this.handleMouseUp}/>
 			</div>
+
 		)
 	}
 }
